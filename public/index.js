@@ -10,7 +10,6 @@ const insertTextContent = (element, textContent) => element.textContent = textCo
 const itemNotFound = (element) => {
     element.textContent = 'Sorry, the pokemon could not be found. Try again later!'
 }
-
 const getPokemon = async () => {
     let count = 0;
     let inputArrayCount = 0;
@@ -78,48 +77,45 @@ const getPokemon = async () => {
     }
     // display result on the page
     if (getElementById('pokemon-container') === null) {
-        body.appendChild(pokemonContainer)
+        htmlbody.appendChild(pokemonContainer)
     }
     // make sure the result is not display more than one if the user keep on pressing the button
     else if (getElementById('pokemon-container') !== null) {
-        body.removeChild(getElementById('pokemon-container'));
-        body.appendChild(pokemonContainer)
+        htmlbody.removeChild(getElementById('pokemon-container'));
+        htmlbody.appendChild(pokemonContainer)
     }
 }
 
 const deletePokemon = async () => {
     //send a fecth request
     let pokemonName = getElementById('pokemon-name').value
-    let res = await fetch(`/delete_pokemon`);
-    // format the response so it can be read
+    let request = {
+        pokemonName
+    }
+    let res = await fetch(`/delete_pokemon`, {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request)
+
+    });
     let parseData = await res.json();
-    let pokemonContainer = createElement('div');
-    pokemonContainer.setAttribute('id', 'pokemon-container');
+    parseData.forEach(el => {
+        console.log(el.name);
+    })
 
+    // fetch('http://localhost:5000/create_fruit', {
+    //     method: "DELETE",
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(pokemonName)
 
-    for (let i = 0; i < parseData.length; i++) {
-        let element = parseData[i]
-        let pokemonNamePara = createElement('h3');
-        let anchorTag = createElement('a');
-        anchorTag.setAttribute('href', element.img + '.jpg');
-        anchorTag.setAttribute('target', '_blank')
-        anchorTag.textContent = element.name
-        pokemonNamePara.appendChild(anchorTag)
-        pokemonContainer.append(pokemonNamePara);
-
-    };
-    let body = getElementById('body');
-    if (getElementById('pokemon-container') === null && pokemonName !== null) {
-        body.appendChild(pokemonContainer)
-    }
-    else if (getElementById('pokemon-container') !== null && pokemonName !== null) {
-        body.removeChild(getElementById('pokemon-container'));
-        body.appendChild(pokemonContainer)
-    }
-
+    // })
 }
 
-let body = getElementById('body');
+let htmlbody = getElementById('body');
 let para = createElement('h3');
 let requestButton = getElementById('request-button');
 let deleteButton = getElementById('delete-button')
