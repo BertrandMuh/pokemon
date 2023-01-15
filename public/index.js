@@ -55,13 +55,11 @@ const getPokemon = async () => {
         if (parseData.length == 0) {
             let message = 'The database is empty'
             messageForEmptyString(pokemonContainer, pokemonNamePara, message);
-            console.log(parseData, parseData.length);
             // display result on the page
             displayOnThePage(htmlbody, pokemonContainer);
         }
 
         else if (parseData.length > 0) {
-            console.log(parseData, parseData.length);
             // Loop through the data received
             for (let i = 0; i < parseData.length; i++) {
                 let element = parseData[i];
@@ -124,6 +122,8 @@ const deletePokemon = async () => {
         let request = {
             inputItem
         }
+
+        // Send the request and wait for the response
         let res = await fetch(`/delete_pokemon`, {
             method: "DELETE",
             headers: {
@@ -133,12 +133,46 @@ const deletePokemon = async () => {
 
         });
         let parseData = await res.json();
-        if (parseData.length == 0) {
+
+        // Do this if everything was deleted
+        if (Object.keys(parseData).length == 0) {
             let message = 'All the data have been deleted'
             let pokemonNamePara = createElement('h3');
             messageForEmptyString(pokemonContainer, pokemonNamePara, message)
         }
-        console.log(parseData, parseData.length);
+        // Do this if some values were deleted
+        else if (Object.keys(parseData).length > 0) {
+            let { pokemon: remainingElements, removedElements: deletedElements } = parseData;
+            let remainingElementsContainer = createElement('div');
+            let deletedElementsContainer = createElement('div');
+
+            remainingElementsContainer.setAttribute('id', 'remaining');
+            deletedElementsContainer.setAttribute('id', 'deleted');
+
+            let remainingHeader = createElement('h2');
+            let deletedHeader = createElement('h2');
+
+            remainingHeader.textContent = 'Current Database';
+            deletedHeader.textContent = 'Deleted content';
+
+            remainingElementsContainer.appendChild(remainingHeader);
+            deletedElementsContainer.appendChild(deletedHeader);
+
+            remainingElements.forEach(el => {
+                let para = createElement('h3');
+                para.textContent = el.name
+                remainingElementsContainer.appendChild(para);
+            })
+            deletedElements.forEach(el => {
+                let para = createElement('h3');
+                para.textContent = el.name
+                deletedElementsContainer.appendChild(para);
+            })
+
+            pokemonContainer.appendChild(deletedElementsContainer);
+            pokemonContainer.appendChild(remainingElementsContainer)
+
+        }
     }
     displayOnThePage(htmlbody, pokemonContainer);
 
