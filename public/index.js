@@ -13,7 +13,7 @@ const itemNotFound = (element) => {
 'Please, type the name of the pokemon you want to delete'
 const messageForEmptyString = (pokemonContainer, pokemonNamePara, message) => {
     insertTextContent(pokemonNamePara, message)
-    pokemonNamePara.style.color = 'red'
+    pokemonNamePara.setAttribute('class', 'delete warning')
     pokemonContainer.append(pokemonNamePara);
 }
 
@@ -51,8 +51,7 @@ const getPokemon = async () => {
 
         let res = await fetch('/get_pokemon_data');
         let parseData = await res.json();
-
-        if (parseData.length == 0) {
+        if (Object.keys(parseData).length == 0) {
             let message = 'The database is empty'
             messageForEmptyString(pokemonContainer, pokemonNamePara, message);
             // display result on the page
@@ -165,6 +164,7 @@ const deletePokemon = async () => {
             })
             deletedElements.forEach(el => {
                 let para = createElement('h3');
+                para.setAttribute('class', 'delete')
                 para.textContent = el.name
                 deletedElementsContainer.appendChild(para);
             })
