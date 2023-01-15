@@ -1,4 +1,4 @@
-const pokemon = [
+let pokemon = [
 
     { name: "bulbasaur", img: "http://img.pokemondb.net/artwork/bulbasaur", age: 3 },
 

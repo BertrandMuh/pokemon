@@ -1,6 +1,7 @@
-const express = require('express')
-const pokemon = require('./pokemon')
 
+
+const express = require('express')
+let pokemon = require('./models/pokemon')
 
 const app = express()
 
@@ -13,8 +14,32 @@ app.get('/get_pokemon_data', (req, res) => {
     res.send(pokemon)
 });
 app.delete(`/delete_pokemon`, (req, res) => {
+    console.log(pokemon);
     console.log(req.body);
-    res.send(pokemon)
+    let request = req.body.inputItem;
+    let removedElements = []
+    if (request.length == 1 && request[0].toLowerCase() === 'all') {
+        pokemon = [];
+        res.send(pokemon)
+    }
+    else if (request.length > 1) {
+        request.forEach(el => {
+            pokemon.forEach((Element, idx) => {
+                if (el.toLowerCase() == Element.name.toLowerCase()) {
+                    removedElements.push(pokemon.splice(idx, 1))
+                }
+            })
+            console.log(el);
+
+        });
+        let response = {
+            removedElements,
+            pokemon
+        }
+        console.log(response)
+        res.send(response)
+    }
+
 });
 
 

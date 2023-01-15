@@ -10,72 +10,14 @@ const insertTextContent = (element, textContent) => element.textContent = textCo
 const itemNotFound = (element) => {
     element.textContent = 'Sorry, the pokemon could not be found. Try again later!'
 }
-const getPokemon = async () => {
-    let count = 0;
-    let inputArrayCount = 0;
+'Please, type the name of the pokemon you want to delete'
+const messageForEmptyString = (pokemonContainer, pokemonNamePara, message) => {
+    insertTextContent(pokemonNamePara, message)
+    pokemonNamePara.style.color = 'red'
+    pokemonContainer.append(pokemonNamePara);
+}
 
-    let res = await fetch('/get_pokemon_data');
-    let parseData = await res.json();
-
-    //create elements to contain the data requested
-    let pokemonContainer = createElement('div');
-    pokemonContainer.setAttribute('id', 'pokemon-container');
-    let pokemonName = getElementById('pokemon-name').value;
-
-    // return a list of element if more than one value were entered
-    let inputItem = pokemonName.split(',').map(el => el.trim().toLowerCase())
-
-    // Loop through the data received
-    for (let i = 0; i < parseData.length; i++) {
-        let element = parseData[i];
-        // create elements to contain the data retrieved
-        let pokemonNamePara = createElement('h3');
-        let anchorTag = createElement('a');
-        anchorTag.setAttribute('href', element.img + '.jpg');
-        anchorTag.setAttribute('target', '_blank')
-
-        // Do this if user entered less than two values
-        if (inputItem.length < 2) {
-            // Do this if input value is not empty
-            if (pokemonName.toLowerCase() === element.name.toLowerCase() || pokemonName.toLowerCase() === 'all') {
-                insertTextContent(anchorTag, element.name)
-                pokemonNamePara.appendChild(anchorTag)
-                pokemonContainer.append(pokemonNamePara);
-                count++
-                inputArrayCount++
-            }
-            // Do this if input value is empty
-            else if (pokemonName.toLowerCase() === '') {
-                insertTextContent(pokemonNamePara, 'Please, type the name of the pokemon or type all to display all the pokemon name')
-                pokemonNamePara.style.color = 'red'
-                pokemonContainer.append(pokemonNamePara);
-                count++
-                inputArrayCount++
-                break
-            }
-        }
-
-        // Do this if more than one value were provided
-        else {
-            inputItem.forEach(item => {
-                if (element.name.toLowerCase() == item) {
-                    insertTextContent(anchorTag, element.name)
-                    pokemonNamePara.appendChild(anchorTag)
-                    pokemonContainer.append(pokemonNamePara);
-                    inputArrayCount++
-                    count++
-                    console.log(inputArrayCount)
-                }
-            });
-        }
-    };
-
-    //Do this if nothing was found it the database
-    if (count == 0 || inputArrayCount == 0) {
-        itemNotFound(para);
-        pokemonContainer.appendChild(para)
-    }
-    // display result on the page
+const displayOnThePage = (htmlbody, pokemonContainer) => {
     if (getElementById('pokemon-container') === null) {
         htmlbody.appendChild(pokemonContainer)
     }
@@ -85,25 +27,110 @@ const getPokemon = async () => {
         htmlbody.appendChild(pokemonContainer)
     }
 }
+const getPokemon = async () => {
+    let count = 0;
+    let inputArrayCount = 0;
+
+    //create elements to contain the data requested
+    let pokemonContainer = createElement('div');
+    pokemonContainer.setAttribute('id', 'pokemon-container');
+    let pokemonName = getElementById('pokemon-name').value;
+    let pokemonNamePara = createElement('h3');
+    // return a list of element if more than one value were entered
+    let inputItem = pokemonName.split(',').map(el => el.trim().toLowerCase())
+
+    if (pokemonName.toLowerCase() === '') {
+        let message = 'Please, type the name of the pokemon(s) you are looking for.'
+        messageForEmptyString(pokemonContainer, pokemonNamePara, message)
+        count++
+        inputArrayCount++
+    }
+    else {
+
+        let res = await fetch('/get_pokemon_data');
+        let parseData = await res.json();
+
+        // Loop through the data received
+        for (let i = 0; i < parseData.length; i++) {
+            let element = parseData[i];
+            // create elements to contain the data retrieved
+            let pokemonNamePara = createElement('h3');
+            let anchorTag = createElement('a');
+            anchorTag.setAttribute('href', element.img + '.jpg');
+            anchorTag.setAttribute('target', '_blank')
+
+            // Do this if user entered less than two values
+            if (inputItem.length < 2) {
+                // Do this if input value is not empty
+                if (pokemonName.toLowerCase() === element.name.toLowerCase() || pokemonName.toLowerCase() === 'all') {
+                    insertTextContent(anchorTag, element.name)
+                    pokemonNamePara.appendChild(anchorTag)
+                    pokemonContainer.append(pokemonNamePara);
+                    count++
+                    inputArrayCount++
+                }
+            }
+
+            // Do this if more than one value were provided
+            else {
+                inputItem.forEach(item => {
+                    if (element.name.toLowerCase() == item) {
+                        insertTextContent(anchorTag, element.name)
+                        pokemonNamePara.appendChild(anchorTag)
+                        pokemonContainer.append(pokemonNamePara);
+                        inputArrayCount++
+                        count++
+                    }
+                });
+            }
+        };
+
+    }
+
+
+    //Do this if nothing was found it the database
+    if (count == 0 || inputArrayCount == 0) {
+        itemNotFound(para);
+        pokemonContainer.appendChild(para)
+    }
+    // display result on the page
+    displayOnThePage(htmlbody, pokemonContainer);
+}
 
 const deletePokemon = async () => {
     //send a fecth request
-    let pokemonName = getElementById('pokemon-name').value
-    let request = {
-        pokemonName
-    }
-    let res = await fetch(`/delete_pokemon`, {
-        method: "DELETE",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(request)
+    let pokemonContainer = createElement('div');
+    pokemonContainer.setAttribute('id', 'pokemon-container');
+    let pokemonName = getElementById('pokemon-name').value;
 
-    });
-    let parseData = await res.json();
-    parseData.forEach(el => {
-        console.log(el.name);
-    })
+    if (pokemonName == '') {
+        let message = 'Please, type the name of the pokemon you want to delete'
+        let pokemonNamePara = createElement('h3');
+        messageForEmptyString(pokemonContainer, pokemonNamePara, message)
+    }
+    else {
+        let inputItem = pokemonName.split(',').map(el => el.trim().toLowerCase())
+        let request = {
+            inputItem
+        }
+        let res = await fetch(`/delete_pokemon`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(request)
+
+        });
+        let parseData = await res.json();
+        if (parseData.length == 0) {
+            let message = 'All the data have been deleted'
+            let pokemonNamePara = createElement('h3');
+            messageForEmptyString(pokemonContainer, pokemonNamePara, message)
+        }
+        console.log(parseData, parseData.length);
+    }
+    displayOnThePage(htmlbody, pokemonContainer);
+
 
     // fetch('http://localhost:5000/create_fruit', {
     //     method: "DELETE",
@@ -121,3 +148,4 @@ let requestButton = getElementById('request-button');
 let deleteButton = getElementById('delete-button')
 requestButton.addEventListener('click', getPokemon);
 deleteButton.addEventListener('click', deletePokemon)
+
