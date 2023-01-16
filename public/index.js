@@ -105,9 +105,6 @@ const getPokemon = async () => {
 
 }
 
-const deleteConfirmation = () => {
-
-}
 
 const deletePokemon = async () => {
     //send a fecth request
@@ -115,12 +112,14 @@ const deletePokemon = async () => {
     pokemonContainer.setAttribute('id', 'pokemon-container');
     let pokemonName = getElementById('pokemon-name').value;
 
+    // make sure the input field is not empty
     if (pokemonName == '') {
         let message = 'Please, type the name of the pokemon you want to delete'
         let pokemonNamePara = createElement('h3');
         messageForEmptyString(pokemonContainer, pokemonNamePara, message)
     }
     else {
+        // send the request as an object containing an array of value
         let inputItem = pokemonName.split(',').map(el => el.trim().toLowerCase())
         let request = {
             inputItem
@@ -155,12 +154,14 @@ const deletePokemon = async () => {
             let deletedHeader = createElement('h2');
 
             remainingHeader.textContent = 'Current Database';
+            // do this when at least one item is deleted
             if (Object.keys(parseData.removedElements).length == 1) {
                 deletedHeader.textContent = 'The following name has been deleted:';
             }
             else if (Object.keys(parseData.removedElements).length > 1) {
                 deletedHeader.textContent = 'The following names have been deleted:';
             }
+            // Do this if the item was not found
             else if (Object.keys(parseData.removedElements) == 0) {
                 deletedHeader.textContent = 'The item was not found in the database.';
                 deletedHeader.setAttribute('class', 'warning')
