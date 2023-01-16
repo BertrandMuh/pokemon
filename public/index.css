@@ -1,38 +1,171 @@
-a {
-    color: black;
-    text-decoration: none;
-}
-
 * {
     margin: 0;
     padding: 0;
 }
 
+div {
+    color: white;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
 body {
-    padding: 10px 30px;
+    background: rgb(33, 30, 30);
+}
+
+#body {
+    height: 100%;
+    width: 100%
+}
+
+h1 {
+    color: black;
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    background: rgb(181, 229, 249);
+    top: 0;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    font-size: 50px;
+}
+
+#deleted,
+#remaining {
+    color: white;
 }
 
 .delete,
 .warning {
     color: red;
+    font-size: 16px;
+
+}
+
+#main {
+    position: relative;
+    top: 50px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    width: max-content;
+    min-width: 250px;
+    margin: auto;
 }
 
 
+
+#prompt>strong {
+    color: rgb(142, 1, 1);
+    font-size: 20px;
+}
+
+#yes,
+#no {
+    color: white;
+    padding: 5px;
+}
+
+#yes {
+    background: green;
+}
+
+#no {
+    background: red;
+}
+
+#prompt>* {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 2px auto;
+}
+
 #form-container {
     display: flex;
+    align-items: center;
+    width: 100%;
+    column-gap: 15px;
+}
+
+#form-container>* {
+    display: flex;
     flex-direction: column;
-    max-width: 200px;
-    height: auto;
-    gap: 5px;
+    background: lightgray;
+    height: max-content;
+}
+
+#prompt {
+    width: max-content;
+    padding: 10px;
+    justify-content: center;
+    box-shadow: 0 0 15px red;
+    background: pink;
+    display: none;
+}
+
+#form {
+    width: 450px;
+    min-width: 250px;
+    gap: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.372);
+    padding: 15px;
     animation-name: form;
     animation-iteration-count: infinite;
     animation-duration: 4s;
 }
 
-#form-container>* {
+#request-button,
+#delete-button {
+    padding: 3px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#form>* {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     align-items: center;
+    column-gap: 10px;
     height: 25px;
     font-size: 15px;
+}
+
+#form>input[type=search] {
+    border: 0;
+    padding: 0 5px;
+    font-size: 18px;
+    outline: 0;
+}
+
+#form>input[type=search]:focus {
+    outline: 0;
+    box-shadow: 0 0 2px black;
+}
+
+#request-button,
+#delete-button {
+    color: white;
+}
+
+#request-button {
+    background: green;
+}
+
+#delete-button {
+    background: red;
+}
+
+#pokemon-container>h3 {
+    height: 50px;
 }

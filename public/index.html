@@ -10,13 +10,30 @@
     <link rel="stylesheet" href="index.css">
 </head>
 
-<body id="body">
-    <h1>Pokemon</h1>
-    <div id="form-container">
-        <input id="pokemon-name" type="text" placeholder="e.g.Pokemon name or all">
-        <div id="button-div">
-            <input id='request-button' type="submit" value="Get pokemon">
-            <button id='delete-button' type="button">DELETE</button>
+<body>
+    <div id="body">
+        <h1>Pokemon</h1>
+        <div id="main">
+            <div id="form-container">
+                <div id="form">
+                    <input id="pokemon-name" type="search" placeholder="e.g.Pokemon name or all">
+                    <div id="button-div">
+                        <button id='request-button' type="button">Get pokemon</button>
+                        <button id='delete-button' type="button">DELETE</button>
+                    </div>
+                </div>
+                <div id="prompt">
+                    <strong>Are you sure you want to delete?</strong>
+                    <div>
+                        <button id="yes" type="button">YES</button>
+                        <button id="no" type="button">NO</button>
+                    </div>
+                </div>
+            </div>
+            <div class="name-detail-list">
+                <div id="name-list"></div>
+                <div id="detail"></div>
+            </div>
         </div>
     </div>
 </body>

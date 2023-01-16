@@ -16,9 +16,27 @@ app.get('/get_pokemon_data', (req, res) => {
 app.delete(`/delete_pokemon`, (req, res) => {
     let request = req.body.inputItem;
     let removedElements = []
-    if (request.length == 1 && request[0].toLowerCase() === 'all') {
-        pokemon = {}
-        res.send(pokemon)
+    if (request.length == 1) {
+        if (request[0].toLowerCase() === 'all') {
+            pokemon = {}
+            res.send(pokemon)
+        }
+        else {
+            request.forEach(el => {
+                pokemon.forEach((Element, idx) => {
+                    if (el.toLowerCase() == Element.name.toLowerCase()) {
+                        removedElements.push(Element);
+                        pokemon.splice(idx, 1)
+                    }
+                })
+
+            });
+            let response = {
+                removedElements,
+                pokemon
+            }
+            res.send(response)
+        }
     }
     else if (request.length > 1) {
         request.forEach(el => {

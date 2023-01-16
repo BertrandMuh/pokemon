@@ -105,6 +105,10 @@ const getPokemon = async () => {
 
 }
 
+const deleteConfirmation = () => {
+
+}
+
 const deletePokemon = async () => {
     //send a fecth request
     let pokemonContainer = createElement('div');
@@ -129,7 +133,6 @@ const deletePokemon = async () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(request)
-
         });
         let parseData = await res.json();
 
@@ -152,7 +155,16 @@ const deletePokemon = async () => {
             let deletedHeader = createElement('h2');
 
             remainingHeader.textContent = 'Current Database';
-            deletedHeader.textContent = 'Deleted content';
+            if (Object.keys(parseData.removedElements).length == 1) {
+                deletedHeader.textContent = 'The following name has been deleted:';
+            }
+            else if (Object.keys(parseData.removedElements).length > 1) {
+                deletedHeader.textContent = 'The following names have been deleted:';
+            }
+            else if (Object.keys(parseData.removedElements) == 0) {
+                deletedHeader.textContent = 'The item was not found in the database.';
+                deletedHeader.setAttribute('class', 'warning')
+            }
 
             remainingElementsContainer.appendChild(remainingHeader);
             deletedElementsContainer.appendChild(deletedHeader);
@@ -175,22 +187,24 @@ const deletePokemon = async () => {
         }
     }
     displayOnThePage(htmlbody, pokemonContainer);
-
-
-    // fetch('http://localhost:5000/create_fruit', {
-    //     method: "DELETE",
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(pokemonName)
-
-    // })
 }
 
-let htmlbody = getElementById('body');
+const displayDetails = el => {
+    // const nameList = getElementById('name-list');
+    //check if the element clicked is an anchor
+    const isAnchor = el.target.nodeName === 'A';
+    if (isAnchor) {
+        //change the content of the title if true
+        isAnchor.innerHTML = 'yes'
+    }
+}
+let nameList = getElementById('name-list');
+nameList.addEventListener('click', displayDetails)
+let htmlbody = getElementById('name-list');
 let para = createElement('h3');
 let requestButton = getElementById('request-button');
 let deleteButton = getElementById('delete-button')
 requestButton.addEventListener('click', getPokemon);
 deleteButton.addEventListener('click', deletePokemon)
+
 
