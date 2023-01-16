@@ -189,17 +189,6 @@ const deletePokemon = async () => {
     displayOnThePage(htmlbody, pokemonContainer);
 }
 
-const displayDetails = el => {
-    // const nameList = getElementById('name-list');
-    //check if the element clicked is an anchor
-    const isAnchor = el.target.nodeName === 'A';
-    if (isAnchor) {
-        //change the content of the title if true
-        isAnchor.innerHTML = 'yes'
-    }
-}
-let nameList = getElementById('name-list');
-nameList.addEventListener('click', displayDetails)
 let htmlbody = getElementById('name-list');
 let para = createElement('h3');
 let requestButton = getElementById('request-button');
