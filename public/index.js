@@ -50,33 +50,28 @@ const getPokemon = async () => {
     else {
 
         let res = await fetch('/get_pokemon_data');
-        let parseData = await res.json();
-        if (Object.keys(parseData).length == 0) {
+        getParseData = await res.json();
+        if (Object.keys(getParseData).length == 0) {
             let message = 'The database is empty'
             messageForEmptyString(pokemonContainer, pokemonNamePara, message);
             // display result on the page
             displayOnThePage(htmlbody, pokemonContainer);
         }
 
-        else if (parseData.length > 0) {
+        else if (getParseData.length > 0) {
             // Loop through the data received
-            for (let i = 0; i < parseData.length; i++) {
-                let element = parseData[i];
+            for (let i = 0; i < getParseData.length; i++) {
+                let element = getParseData[i];
                 // create elements to contain the data retrieved
                 let pokemonNamePara = createElement('h3');
-                let anchorTag = createElement('a');
-                anchorTag.setAttribute('href', element.img + '.jpg');
-                anchorTag.setAttribute('target', '_blank')
+                pokemonNamePara.setAttribute('class', 'name')
 
                 // Do this if user entered less than two values
                 if (inputItem.length < 2) {
                     // Do this if input value is not empty
                     if (pokemonName.toLowerCase() === element.name.toLowerCase() || pokemonName.toLowerCase() === 'all') {
-                        insertTextContent(anchorTag, element.name)
-                        pokemonNamePara.appendChild(anchorTag)
+                        insertTextContent(pokemonNamePara, element.name)
                         pokemonContainer.append(pokemonNamePara);
-                        count++
-                        inputArrayCount++
                     }
                 }
 
@@ -84,15 +79,15 @@ const getPokemon = async () => {
                 else {
                     inputItem.forEach(item => {
                         if (element.name.toLowerCase() == item) {
-                            insertTextContent(anchorTag, element.name)
-                            pokemonNamePara.appendChild(anchorTag)
+                            insertTextContent(pokemonNamePara, element.name)
                             pokemonContainer.append(pokemonNamePara);
-                            inputArrayCount++
-                            count++
                         }
                     });
                 }
+                inputArrayCount++
+                count++
             };
+
             //Do this if nothing was found it the database
             if (count == 0 || inputArrayCount == 0) {
                 itemNotFound(para);
@@ -104,7 +99,6 @@ const getPokemon = async () => {
     }
 
 }
-
 
 const deletePokemon = async () => {
     //send a fecth request
@@ -184,17 +178,29 @@ const deletePokemon = async () => {
 
             pokemonContainer.appendChild(deletedElementsContainer);
             pokemonContainer.appendChild(remainingElementsContainer)
-
         }
     }
     displayOnThePage(htmlbody, pokemonContainer);
 }
 
+const displayTheDetail = (e) => {
+    const isHeader3 = e.target.nodeName === 'H3';
+    if (isHeader3) {
+        const pokemonName = e.target.textContent
+        let detailContainer = getElementById('detail');
+        let image = createElement('img');
+        let infoDiv = createElement('div');
+    }
+
+}
+let getParseData;
+let nameList = getElementById('name-list');
 let htmlbody = getElementById('name-list');
 let para = createElement('h3');
 let requestButton = getElementById('request-button');
 let deleteButton = getElementById('delete-button')
 requestButton.addEventListener('click', getPokemon);
 deleteButton.addEventListener('click', deletePokemon)
+nameList.addEventListener('click', displayTheDetail)
 
 
