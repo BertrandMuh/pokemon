@@ -188,8 +188,31 @@ const displayTheDetail = (e) => {
     if (isHeader3) {
         const pokemonName = e.target.textContent
         let detailContainer = getElementById('detail');
+        let name = createElement('h2')
         let image = createElement('img');
+        let age = createElement('h2')
         let infoDiv = createElement('div');
+        getParseData.forEach(el => {
+            if (el.name == pokemonName) {
+                image.src = el.img + '.jpg';
+                age.textContent = 'Age : ' + el.age
+            }
+        });
+        name.textContent = 'Name : ' + pokemonName;
+        infoDiv.appendChild(name);
+        infoDiv.appendChild(age);
+        if (detailContainer.hasChildNodes() === false) {
+            detailContainer.appendChild(image);
+            detailContainer.appendChild(infoDiv)
+        }
+        else {
+            while (detailContainer.firstChild) {
+                detailContainer.removeChild(detailContainer.firstChild)
+            }
+            detailContainer.appendChild(image);
+            detailContainer.appendChild(infoDiv)
+        }
+
     }
 
 }
